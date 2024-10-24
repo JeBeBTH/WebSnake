@@ -1,8 +1,12 @@
-WEBSNAKE is a web-based implementation of the classic Snake game. 
-The project consists of a frontend, a backend, and a database service
-All of these are containerized using Docker and deployed on a Kubernetes cluster.
+WEBSNAKE
+========
 
---------- Project Structure ---------
+WEBSNAKE is a web-based implementation of the classic Snake game. 
+The project includes a containerized frontend, backend, and database service, 
+all orchestrated using Docker and deployed on a Kubernetes cluster.
+
+Project Structure
+=================
 
 .vscode/
     settings.json
@@ -24,78 +28,63 @@ sh/
     deploy.sh
 yaml/
     websnake-deployment.yaml
---------------------------------------
 
+Services
+========
 
+Frontend
+--------
 
+The frontend provides the user interface for the Snake game 
+and is built using HTML, CSS, and JavaScript. 
+It is served by an Nginx server, which is configured in `nginx.conf`.
 
---------- Services ---------
+- HTML: `index.html`
+- CSS: `style.css`
+- JavaScript: `snake.js`
 
+Backend
+-------
 
---------- Frontend ---------
+The backend is a Flask application that exposes APIs to store and retrieve game scores. 
+It communicates with a MongoDB database to persist scores.
 
-The frontend is a web application that provides the user interface for the Snake game. 
-It is implemented using HTML, CSS, and JavaScript.
+- Flask Application: `app.py`
 
-------------------------
-HTML: index.html
-CSS: style.css
-JavaScript: snake.js
-------------------------
+Database
+--------
 
-The frontend is served by an Nginx server, configured in nginx.conf.
+The database service is powered by MongoDB, used to store game scores. 
+The MongoDB instance is containerized using a Dockerfile located in the `db` directory.
 
+Communication Between Services
+==============================
 
+- Frontend ↔ Backend: 
+  The frontend sends HTTP requests to the backend when a game ends. 
+  It uses a `POST` request to the `/scores` endpoint to store game scores in the database.
+  
+- Backend ↔ Database: 
+  The backend interacts with MongoDB to store and retrieve scores from the `scores` collection.
 
-
---------- Backend---------
-
-The backend is a Flask application that provides APIs for storing and retrieving game scores. 
-It interacts with a MongoDB database to persist the scores.
-
-------------------------
-Flask Application: app.py
-------------------------
-
-
-
-
---------- Database---------
-
-The database service uses MongoDB to store the game scores. 
-The MongoDB instance is containerized and configured using a Dockerfile in the db directory.
-
-
-
-
---------- Communication Between Services ---------
-
-Frontend to Backend: The frontend communicates with the backend via HTTP requests. 
-When a game ends, the frontend sends the score to the backend using a POST request to the /scores endpoint. 
-The backend stores this score in the MongoDB database.
-
-Backend to Database: 
-The backend uses the MongoDB client to interact with the database. 
-It stores the scores in the scores collection and retrieves the top scores when requested.
-
-
-
-
---------- Deployment ---------
+Deployment
+==========
 
 Building and Pushing Docker Images
-To build and push the Docker images for the frontend and backend, run the following script:
-----------------------------
-|     sh/build-push.sh     |
-----------------------------
+----------------------------------
+
+To build and push the Docker images for the frontend and backend, run:
+
+    sh/build-push.sh
+
 This script builds the Docker images and pushes them to Docker Hub.
 
-
-
 Deploying to Kubernetes
-To deploy the application to a Kubernetes cluster, run the following script:
-----------------------------
-|	   sh/deploy.sh	       |
-----------------------------
-This script applies the Kubernetes deployment configuration defined in websnake-deployment.yaml
+-----------------------
+
+To deploy the application to a Kubernetes cluster, run:
+
+    sh/deploy.sh
+
+This script applies the Kubernetes deployment configuration defined in `websnake-deployment.yaml` 
 and restarts the deployments for the frontend and backend.
