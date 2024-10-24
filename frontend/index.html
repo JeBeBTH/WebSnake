@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake In a Web</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>SNAKE</h1>
+    <div class="game-container">
+        <div class="game-area">
+            <canvas id="gameCanvas"></canvas>
+            <button id="start-button">Start Game</button>
+        </div>
+        <div class="leaderboard">
+            <h2>Leaderboard</h2>
+            <ul id="leaderboard-list"></ul>
+        </div>
+    </div>
+    <script src="snake.js"></script>
+    <script>
+        // RESTful api
+        async function sendScore(score) {
+            await fetch('http://localhost:5000/scores', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ score })
+            });
+        }
+
+        async function fetchTopScores() {
+            const response = await fetch('http://localhost:5000/top-scores');
+            const topScores = await response.json();
+            const leaderboardList = document.getElementById('leaderboard-list');
+            leaderboardList.innerHTML = '';
+            topScores.forEach(score => {
+                const listItem = document.createElement('li');
+                listItem.textContent = score.score;
+                leaderboardList.appendChild(listItem);
+            });
+        }
+        fetchTopScores();
+    </script>
+</body>
+</html>

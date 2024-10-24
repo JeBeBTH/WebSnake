@@ -1,0 +1,5 @@
+{
+    "yaml.schemas": {
+        "kubernetes://schema/apps/v1%40statefulset": "file:///c%3A/WebSnake/yaml/websnake-deployment.yaml"
+    }
+}
