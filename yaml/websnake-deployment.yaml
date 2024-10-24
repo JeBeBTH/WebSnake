@@ -5,23 +5,19 @@
 # TODO: Would it be smart to split the yaml file into multiple files for each component?
 
 
-
-
 ## Frontend
 #--------------------------------------------------------------------------------------------------
 apiVersion: v1                # API version for the service resource
 kind: Service                 # Resource type
 
-# Metadata for the service for the frontend
 metadata:
   name: frontend              # Name of the service
   labels: 
     app: frontend             # Label for the service
 
-# Spec for the service for the frontend
 spec:
   type: LoadBalancer          # Service type is LoadBalancer, which exposes the Service externally using a cloud provider's load balancer
-  ports:                      # List of ports that the service should expose
+  ports:
     - name: http              # Name of the port
       port: 3000              # Port that the Service will expose
       nodePort: 30001         # Node port to expose the Service on each node in the cluster
@@ -30,17 +26,14 @@ spec:
     app: frontend             # Selector to match the Service with the frontend pods
 ---
 
-# Define a Deployment to manage the frontend application pods
 apiVersion: apps/v1           # API version for the deployment resource
 kind: Deployment              # Resource type
 
-# Metadata for the deployment for the frontend
 metadata:
   name: frontend              # Name of the deployment
   labels:
     app: frontend             # Label for the deployment
 
-# Spec for the deployment for the frontend
 spec:
   replicas: 3                 # Number of pod replicas for the Deployment (horizontal scaling)
   selector:
@@ -57,34 +50,34 @@ spec:
           ports:
             - containerPort: 3000                 # Port that the container listens on
 ---
+
 ## Backend
 #--------------------------------------------------------------------------------------------------
 apiVersion: v1                # API version for the service resource
 kind: Service                 # Resource type
 
-# Metadata for the service for the backend
 metadata:
   name: backend               # Name of the service
   labels:
     app: backend              # Label for the service
+
 spec:
   type: LoadBalancer          # Service type is LoadBalancer, which exposes the Service externally using a cloud provider's load balancer
   ports:
     - port: 5000              # Port that the Service will expose
       targetPort: 5000        # Port that the Service will forward to
-  selector:                   # Selector to match the Service with the backend pods
-    app: backend              # Label for the backend
+  selector:
+    app: backend              # Selector to match the Service with the backend pods
 ---
 
-# Define a Deployment to manage the backend application pods
 apiVersion: apps/v1           # API version for the deployment resource
 kind: Deployment              # Resource type
 
-# Metadata for the deployment for the backend
 metadata:
   name: backend               # Name of the deployment
   labels:
     app: backend              # Label to identify the deployment
+
 spec:
   replicas: 3                 # Number of pod replicas for the Deployment (horizontal scaling)
   selector:
@@ -101,30 +94,36 @@ spec:
           ports:
             - containerPort: 5000                 # Port that the container listens on
 ---
-## Mongo DB
+
+## MongoDB
 #--------------------------------------------------------------------------------------------------
 apiVersion: v1                # API version for the service resource
 kind: Service                 # Resource type
+
 metadata:
   name: mongodb               # Name of the service
   labels:
     app: mongodb              # Label for the service
+
 spec:
   ports:
     - port: 27017               # Port that the Service will expose
-      targetPort: mongodb-port  # Port that the Service will forward to
+      targetPort: 27017          # Correct target port for MongoDB
   selector:
-    app: mongodb                # Selector to match the Service with the MongoDB pods 
+    app: mongodb                # Selector to match the Service with the MongoDB pods
 ---
+
 apiVersion: apps/v1             # API version for the StatefulSet resource
 kind: StatefulSet               # Resource type
+
 metadata:
   name: mongodb                 # Name of the StatefulSet
   labels:
     app: mongodb                # Label to identify the StatefulSet
+
 spec:
-  serviceName: mongodb          # Name of the service that the StatefulSet will create
-  replicas: 1                   # Number of pod replicas for the StatefulSet (horizontal scaling)
+  serviceName: mongodb          # Name of the service that the StatefulSet will use
+  replicas: 1                   # Number of pod replicas for the StatefulSet
   selector:
     matchLabels:
       app: mongodb              # Selector to match the StatefulSet with the MongoDB pods
@@ -145,7 +144,6 @@ spec:
             - name: mongo-config          # Name of the volume
               mountPath: /data/configdb   # Mount path for the volume
 
-# Define the persistent volume claim (PVC) templates for the StatefulSet
   volumeClaimTemplates:
     - metadata:
         name: score-data                # Name of the persistent volume claim
@@ -153,7 +151,7 @@ spec:
         accessModes: ["ReadWriteOnce"]  # Access mode for the persistent volume claim
         resources:
           requests: 
-            storage: 10Mi               # Storage size for the persistent volume claim (Mi = Mebibytes, 1 Mi = 1,048,576 bytes)
+            storage: 10Mi               # Storage size for the persistent volume claim
     - metadata: 
         name: mongo-config              # Name of the persistent volume claim
       spec:
