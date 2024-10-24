@@ -1,3 +1,6 @@
+# Description: 
+# Build and push the images to docker hub
+
 # For frontend
 cd ../frontend
 docker build -t jebe24/websnake-frontend:latest .

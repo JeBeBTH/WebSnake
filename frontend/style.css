@@ -1,61 +1,76 @@
+/* Description:
+ * This CSS file styles the Snake game web page, including the layout, canvas, and buttons.
+ */
+
+/* Set default browser styles */
 body {
-    text-align: center;
-    font-family: Arial, sans-serif;
+    text-align: center;             /* Center the game on the page */
+    font-family: Arial;             /* Use Arial font */
 }
 
+/* Style the header */
 .game-container {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 20px;
+    display: flex;                  /* Use flexbox for layout */
+    justify-content: center;        /* Center the game horizontally */
+    align-items: flex-start;        /* Align the game to the top of the page */
+    gap: 20px;                      /* Add space between elements */
 }
 
+/* Style the game area */
 .game-area {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    display: flex;                  /* Use flexbox for layout */
+    flex-direction: column;         /* Stack elements vertically */
+    align-items: center;            /* Center the game vertically */
 }
 
+/* Style the game controls */
 canvas {
-    border: 1px solid black;
-    background-color: lightgray;
+    border: 1px solid black;        /* Add a border around the canvas */
+    background-color: lightgray;    /* Set the background color of the canvas */
 }
 
+/* Style the game controls */
 button {
-    margin-top: 20px;
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+    margin-top: 20px;                   /* Add space above the buttons */
+    padding: 10px 20px;                 /* Add padding to the buttons */
+    font-size: 16px;                    /* Set the font size of the buttons */
+    background-color: #4CAF50;        /* Set the background color of the buttons */
+    color: white;                     /* Set the text color of the buttons */
+    border: none;                       /* Remove the button border */
+    border-radius: 5px;                 /* Add rounded corners to the buttons */
+    cursor: pointer;                    /* Change the cursor to a pointer on hover */
 }
 
+/* Style the game controls on hover with mouse */
 button:hover {
-    background-color: #a04591;
+    background-color: #a04591;  /* Change the background color on hover */
 }
 
+/* Style the button when hidden */
 .hidden {
-    display: none;
+    display: none;                      /* Hide the element */
 }
 
+/* Style the leaderboard */
 .leaderboard {
-    text-align: left;
+    text-align: left;                   /* Align text to the left */
 }
 
+/* Style the leaderboard heading */
 .leaderboard h2 {
-    margin-bottom: 10px;
+    margin-bottom: 10px;                /* Add space below the heading */
 }
 
+/* Style the leaderboard list */
 .leaderboard ul {
-    list-style-type: none;
-    padding: 0;
+    list-style-type: none;              /* Remove the default list style */
+    padding: 0;                         /* Remove padding from the list */
 }
 
+/* Style the leaderboard list items */
 .leaderboard li {
-    background-color: #f0f0f0;
-    margin-bottom: 5px;
-    padding: 5px;
-    border-radius: 3px;
+    background-color: #f0f0f0;        /* Set the background color of the list items */
+    margin-bottom: 5px;                 /* Add space below the list items */
+    padding: 5px;                       /* Add padding to the list items */
+    border-radius: 3px;                 /* Add rounded corners to the list items */
 }

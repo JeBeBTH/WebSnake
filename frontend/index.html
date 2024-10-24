@@ -1,45 +1,66 @@
+<!-- 
+Description: 
+This is the main HTML file for the frontend. 
+It contains the game canvas, start button, and leaderboard. 
+It also includes the JavaScript file for the game and fetches the top scores from the backend.
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Meta tags for character set and viewport settings -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Title of the web page -->
     <title>Snake In a Web</title>
+    <!-- Link to the external CSS file for styling -->
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+    <!-- Main heading of the page -->
     <h1>SNAKE</h1>
+    <!-- Container for the game and leaderboard -->
     <div class="game-container">
+        <!-- Area where the game will be displayed -->
         <div class="game-area">
+            <!-- Canvas element where the game will be rendered -->
             <canvas id="gameCanvas"></canvas>
+            <!-- Button to start the game -->
             <button id="start-button">Start Game</button>
         </div>
+        <!-- Section for displaying the leaderboard -->
         <div class="leaderboard">
             <h2>Leaderboard</h2>
+            <!-- Unordered list to display the top scores -->
             <ul id="leaderboard-list"></ul>
         </div>
     </div>
+    <!-- Include the JavaScript file for the game logic -->
     <script src="snake.js"></script>
     <script>
-        // RESTful api
+        // Function to send the score to the backend (RESTful api)
         async function sendScore(score) {
-            await fetch('http://localhost:5000/scores', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ score })
+            await fetch('http://localhost:5000/scores', {           // Send a request to the backend to store the score
+                method: 'POST',                                     // HTTP method to use
+                headers: { 'Content-Type': 'application/json' },    // Headers for the request
+                body: JSON.stringify({ score })                     // Convert the score to a JSON string and send it in the request body
             });
         }
-
+        // Function to fetch the top score from the backend (RESTful api)
         async function fetchTopScores() {
-            const response = await fetch('http://localhost:5000/top-scores');
-            const topScores = await response.json();
-            const leaderboardList = document.getElementById('leaderboard-list');
-            leaderboardList.innerHTML = '';
-            topScores.forEach(score => {
-                const listItem = document.createElement('li');
-                listItem.textContent = score.score;
-                leaderboardList.appendChild(listItem);
+            const response = await fetch('http://localhost:5000/top-scores');       // Fetch the top scores from the backend
+            const topScores = await response.json();                                // Convert the response to JSON
+            const leaderboardList = document.getElementById('leaderboard-list');    // Get the leaderboard list element
+            leaderboardList.innerHTML = '';                                         // Clear the leaderboard list            
+            topScores.forEach(score => {                                            // Iterate over each score
+                const listItem = document.createElement('li');                      // Create a list item for each score
+                listItem.textContent = score.score;                                 // Set the text content of the list item to the score
+                leaderboardList.appendChild(listItem);                              // Append the list item to the leaderboard list
             });
         }
+        // Call the fetchTopScores function to display the top scores directly when the page loads
         fetchTopScores();
     </script>
 </body>

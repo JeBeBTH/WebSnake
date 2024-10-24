@@ -1,3 +1,7 @@
+# Description: 
+# Deploy the application to the Kubernetes cluster
+# and cleanup exited pods
+
 # Apply changes
 cd ../yaml
 kubectl apply -f websnake-deployment.yaml

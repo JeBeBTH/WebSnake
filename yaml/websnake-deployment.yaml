@@ -1,136 +1,163 @@
+# description: 
+# This file contains the Kubernetes deployment configuration for the WebSnake application.
+# The deployment configuration includes the frontend, backend, and MongoDB components of the application.
+# 
+# TODO: Would it be smart to split the yaml file into multiple files for each component?
+
+
+
+
 ## Frontend
 #--------------------------------------------------------------------------------------------------
-apiVersion: v1
-kind: Service
+apiVersion: v1                # API version for the service resource
+kind: Service                 # Resource type
+
+# Metadata for the service for the frontend
 metadata:
-  name: frontend
+  name: frontend              # Name of the service
   labels: 
-    app: frontend
+    app: frontend             # Label for the service
+
+# Spec for the service for the frontend
 spec:
-  type: LoadBalancer
-  ports:
-    - name: http
-      port: 3000
-      nodePort: 30001
-      protocol: TCP
+  type: LoadBalancer          # Service type is LoadBalancer, which exposes the Service externally using a cloud provider's load balancer
+  ports:                      # List of ports that the service should expose
+    - name: http              # Name of the port
+      port: 3000              # Port that the Service will expose
+      nodePort: 30001         # Node port to expose the Service on each node in the cluster
+      protocol: TCP           # Protocol that should be used by the service
   selector:
-    app: frontend
+    app: frontend             # Selector to match the Service with the frontend pods
 ---
-apiVersion: apps/v1
-kind: Deployment
+
+# Define a Deployment to manage the frontend application pods
+apiVersion: apps/v1           # API version for the deployment resource
+kind: Deployment              # Resource type
+
+# Metadata for the deployment for the frontend
 metadata:
-  name: frontend
+  name: frontend              # Name of the deployment
   labels:
-    app: frontend
+    app: frontend             # Label for the deployment
+
+# Spec for the deployment for the frontend
 spec:
-  replicas: 3         # Vertical scaling
+  replicas: 3                 # Number of pod replicas for the Deployment (vertical scaling)
   selector:
     matchLabels:
-      app: frontend
+      app: frontend           # Selector to match the Deployment with the frontend pods
   template:
     metadata:
       labels:
-        app: frontend
+        app: frontend         # Label to identify the pods created by this Deployment
     spec:
       containers:
-        - name: frontend
-          image: jebe24/websnake-frontend:latest
+        - name: frontend                          # Name of the container
+          image: jebe24/websnake-frontend:latest  # Image to use for the container
           ports:
-            - containerPort: 3000
+            - containerPort: 3000                 # Port that the container listens on
 ---
 ## Backend
 #--------------------------------------------------------------------------------------------------
-apiVersion: v1
-kind: Service
+apiVersion: v1                # API version for the service resource
+kind: Service                 # Resource type
+
+# Metadata for the service for the backend
 metadata:
-  name: backend
+  name: backend               # Name of the service
   labels:
-    app: backend
+    app: backend              # Label for the service
 spec:
-  type: LoadBalancer
+  type: LoadBalancer          # Service type is LoadBalancer, which exposes the Service externally using a cloud provider's load balancer
   ports:
-    - port: 5000
-      targetPort: 5000
-  selector:
-    app: backend
+    - port: 5000              # Port that the Service will expose
+      targetPort: 5000        # Port that the Service will forward to
+  selector:                   # Selector to match the Service with the backend pods
+    app: backend              # Label for the backend
 ---
-apiVersion: apps/v1
-kind: Deployment
+
+# Define a Deployment to manage the backend application pods
+apiVersion: apps/v1           # API version for the deployment resource
+kind: Deployment              # Resource type
+
+# Metadata for the deployment for the backend
 metadata:
-  name: backend
+  name: backend               # Name of the deployment
   labels:
-    app: backend
+    app: backend              # Label to identify the deployment
 spec:
-  replicas: 3     # Vertical scaling
+  replicas: 3                 # Number of pod replicas for the Deployment (vertical scaling)
   selector:
     matchLabels:
-      app: backend
+      app: backend            # Selector to match the Deployment with the backend pods
   template:
     metadata:
       labels:
-        app: backend
+        app: backend          # Label to identify the pods created by this Deployment
     spec:
       containers:
-        - name: backend
-          image: jebe24/websnake-backend:latest
+        - name: backend                           # Name of the container
+          image: jebe24/websnake-backend:latest   # Image to use for the container
           ports:
-            - containerPort: 5000
+            - containerPort: 5000                 # Port that the container listens on
 ---
 ## Mongo DB
 #--------------------------------------------------------------------------------------------------
-apiVersion: v1
-kind: Service
+apiVersion: v1                # API version for the service resource
+kind: Service                 # Resource type
 metadata:
-  name: mongodb
+  name: mongodb               # Name of the service
   labels:
-    app: mongodb
+    app: mongodb              # Label for the service
 spec:
   ports:
-    - port: 27017
-      targetPort: mongodb-port
+    - port: 27017               # Port that the Service will expose
+      targetPort: mongodb-port  # Port that the Service will forward to
   selector:
-    app: mongodb
+    app: mongodb                # Selector to match the Service with the MongoDB pods 
 ---
-apiVersion: apps/v1
-kind: StatefulSet
+apiVersion: apps/v1             # API version for the StatefulSet resource
+kind: StatefulSet               # Resource type
 metadata:
-  name: mongodb
+  name: mongodb                 # Name of the StatefulSet
   labels:
-    app: mongodb
+    app: mongodb                # Label to identify the StatefulSet
 spec:
-  serviceName: mongodb
-  replicas: 1
+  serviceName: mongodb          # Name of the service that the StatefulSet will create
+  replicas: 1                   # Number of pod replicas for the StatefulSet (horizontal scaling)
   selector:
     matchLabels:
-      app: mongodb
+      app: mongodb              # Selector to match the StatefulSet with the MongoDB pods
   template:
     metadata:
       labels:
-        app: mongodb
+        app: mongodb            # Label to identify the pods created by this StatefulSet
     spec:
       containers:
-        - name: mongodb
-          image: mongo:latest
+        - name: mongodb               # Name of the container
+          image: mongo:latest         # Image to use for the container
           ports:
-            - containerPort: 27017
-              name: mongodb-port
+            - containerPort: 27017    # Port that the container listens on
+              name: mongodb-port      # Name of the port
           volumeMounts:
-            - name: score-data
-              mountPath: /data/db
-            - name: mongo-config
-              mountPath: /data/configdb
+            - name: score-data            # Name of the volume
+              mountPath: /data/db         # Mount path for the volume
+            - name: mongo-config          # Name of the volume
+              mountPath: /data/configdb   # Mount path for the volume
+
+# Define the persistent volume claim (PVC) templates for the StatefulSet
   volumeClaimTemplates:
     - metadata:
-        name: score-data
+        name: score-data                # Name of the persistent volume claim
       spec:
-        accessModes: ["ReadWriteOnce"]
+        accessModes: ["ReadWriteOnce"]  # Access mode for the persistent volume claim
         resources:
           requests: 
-            storage: 10Mi
+            storage: 10Mi               # Storage size for the persistent volume claim (Mi = Mebibytes, 1 Mi = 1,048,576 bytes)
     - metadata: 
-        name: mongo-config
+        name: mongo-config              # Name of the persistent volume claim
       spec:
-        accessModes: ["ReadWriteOnce"]
+        accessModes: ["ReadWriteOnce"]  # Access mode for the persistent volume claim
         resources:
           requests: 
-            storage: 5Mi
+            storage: 5Mi                # Storage size for the persistent volume claim
