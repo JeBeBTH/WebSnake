@@ -42,7 +42,7 @@ metadata:
 
 # Spec for the deployment for the frontend
 spec:
-  replicas: 3                 # Number of pod replicas for the Deployment (vertical scaling)
+  replicas: 3                 # Number of pod replicas for the Deployment (horizontal scaling)
   selector:
     matchLabels:
       app: frontend           # Selector to match the Deployment with the frontend pods
@@ -86,7 +86,7 @@ metadata:
   labels:
     app: backend              # Label to identify the deployment
 spec:
-  replicas: 3                 # Number of pod replicas for the Deployment (vertical scaling)
+  replicas: 3                 # Number of pod replicas for the Deployment (horizontal scaling)
   selector:
     matchLabels:
       app: backend            # Selector to match the Deployment with the backend pods
