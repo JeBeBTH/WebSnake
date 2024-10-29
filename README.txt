@@ -63,6 +63,7 @@ Communication Between Services
 - Frontend ↔ Backend: 
   The frontend sends HTTP requests to the backend when a game ends. 
   It uses a "POST" request to the "/scores" endpoint to store game scores in the database.
+  It uses a "GET" request to the "/top-scores" endpoint to fetch the highest scores stored in the database.
   
 - Backend ↔ Database: 
   The backend interacts with MongoDB to store and retrieve scores from the "scores" collection.
