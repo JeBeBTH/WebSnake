@@ -1,4 +1,5 @@
 # Description: 
+# dependencies
 # This file contains all the requirements that are needed for the backend to run
 # The requirements are installed using the command: pip install -r requirements.txt under the backend dockerfile
 Flask

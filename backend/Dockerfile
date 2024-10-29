@@ -10,7 +10,7 @@ WORKDIR /app
 # Copy all files from the current directory on the host to the /app directory in the container
 COPY . .
 
-# Install the Python dependencies specified in requirements.txt
+# Install the Python dependencies specified in dependencies.txt
 RUN pip install -r dependencies.txt
 
 # Specify the command to run the application
