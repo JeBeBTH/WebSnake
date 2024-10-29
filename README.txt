@@ -13,7 +13,7 @@ Project Structure
 backend/
     app.py
     Dockerfile
-    requirements.txt
+    dependencies.txt
 db/
     Dockerfile
 frontend/
@@ -37,11 +37,11 @@ Frontend
 
 The frontend provides the user interface for the Snake game 
 and is built using HTML, CSS, and JavaScript. 
-It is served by an Nginx server, which is configured in `nginx.conf`.
+It is served by a Nginx server, which is configured in "nginx.conf".
 
-- HTML: `index.html`
-- CSS: `style.css`
-- JavaScript: `snake.js`
+- HTML: "index.html"
+- CSS: "style.css"
+- JavaScript: "snake.js"
 
 Backend
 -------
@@ -49,23 +49,23 @@ Backend
 The backend is a Flask application that exposes APIs to store and retrieve game scores. 
 It communicates with a MongoDB database to persist scores.
 
-- Flask Application: `app.py`
+- Flask Application: "app.py"
 
 Database
 --------
 
 The database service is powered by MongoDB, used to store game scores. 
-The MongoDB instance is containerized using a Dockerfile located in the `db` directory.
+The MongoDB instance is containerized using a Dockerfile located in the "db" directory.
 
 Communication Between Services
 ==============================
 
 - Frontend ↔ Backend: 
   The frontend sends HTTP requests to the backend when a game ends. 
-  It uses a `POST` request to the `/scores` endpoint to store game scores in the database.
+  It uses a "POST" request to the "/scores" endpoint to store game scores in the database.
   
 - Backend ↔ Database: 
-  The backend interacts with MongoDB to store and retrieve scores from the `scores` collection.
+  The backend interacts with MongoDB to store and retrieve scores from the "scores" collection.
 
 Deployment
 ==========
